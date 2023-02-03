@@ -20,30 +20,35 @@ public class PokemonService {
 
     public void save(Pokemon pokemon)
     {
-        Optional<Pokemon> pokemonOptional = pokemonRepository.findById(pokemon.getId());
-        if(pokemonOptional.isPresent())
+
+        pokemonRepository.save(pokemon);
+        Optional<Trainer>trainerOptional =  trainerRepository.findById(pokemon.getTrainer().getId());
+        if(trainerOptional.isPresent())
         {
+            Trainer trainer = trainerOptional.get();
+            trainer.addPokemon(pokemon);
+            trainerRepository.save(trainer);
+        }
+        else {
             throw new RuntimeException();
         }
-        else
-        {
-            pokemonRepository.save(pokemon);
-            Optional<Trainer>trainerOptional =  trainerRepository.findById(pokemon.getTrainer().getId());
-            if(trainerOptional.isPresent())
-            {
-                Trainer trainer = trainerOptional.get();
-                trainer.addPokemon(pokemon);
-                trainerRepository.save(trainer);
-            }
-            else {
-                throw new RuntimeException();
-            }
-        }
+
     }
 
-    public void delete(Long id)
+    public void delete(Pokemon pokemon)
     {
-        pokemonRepository.deleteById(id);
+
+        Optional<Trainer>trainerOptional =  trainerRepository.findById(pokemon.getTrainer().getId());
+        if(trainerOptional.isPresent())
+        {
+            Trainer trainer = trainerOptional.get();
+            trainer.deletePokemon(pokemon);
+            trainerRepository.save(trainer);
+        }
+        else {
+            throw new RuntimeException();
+        }
+        pokemonRepository.deleteById(pokemon.getId());
     }
 
     public Pokemon findById(Long id)
@@ -58,14 +63,16 @@ public class PokemonService {
 
     public List<Pokemon> findAllByLevel(String level)
     {
-        int IntegerParsed = Integer.parseInt(String.valueOf(level.subSequence(1, level.length())));
+
         if(level.charAt(0) == '>')
         {
+            int IntegerParsed = Integer.parseInt(String.valueOf(level.subSequence(1, level.length())));
             Integer levelInteger = IntegerParsed;
             return pokemonRepository.findAllByLevelGreaterThan(levelInteger);
         }
         else if(level.charAt(0) == '<')
         {
+            int IntegerParsed = Integer.parseInt(String.valueOf(level.subSequence(1, level.length())));
             Integer levelInteger = IntegerParsed;
             return pokemonRepository.findAllByLevelLessThan(levelInteger);
         }

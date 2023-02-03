@@ -1,5 +1,7 @@
 package com.chris.pokemon.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -24,5 +26,6 @@ public class Pokemon {
     private Integer level;
     private String nickname;
     @ManyToOne
+    @JsonIgnoreProperties("pokemonList")
     private Trainer trainer;
 }

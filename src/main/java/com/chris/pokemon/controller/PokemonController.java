@@ -14,10 +14,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/pokemon")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class PokemonController {
     private final PokemonService pokemonService;
 
     @GetMapping
+
     public ResponseEntity<List<Pokemon>> getAllPokemon()
     {
         return new ResponseEntity<>(pokemonService.findAllPokemon(), HttpStatusCode.valueOf(200));
@@ -31,10 +33,9 @@ public class PokemonController {
     }
 
     @DeleteMapping
-    @RequestMapping("/{id}")
-    public ResponseEntity<String> deletePokemon(@PathVariable("id") Long id)
+    public ResponseEntity<String> deletePokemon(@RequestBody Pokemon pokemon)
     {
-        pokemonService.delete(id);
+        pokemonService.delete(pokemon);
         return new ResponseEntity<>("ok", HttpStatusCode.valueOf(200));
     }
 

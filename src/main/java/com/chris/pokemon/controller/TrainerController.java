@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/trainers")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class TrainerController {
 
     private final TrainerService trainerService;
@@ -35,6 +36,11 @@ public class TrainerController {
         return new ResponseEntity<>(trainerService.updateTrainer(trainer),HttpStatusCode.valueOf(200));
     }
 
-
-
+    @DeleteMapping
+    @RequestMapping("/{id}")
+    public ResponseEntity<String> deleteTrainer(@PathVariable("id") Long id)
+    {
+        trainerService.deleteTrainer(id);
+        return new ResponseEntity<>("Deleted",HttpStatusCode.valueOf(200));
+    }
 }

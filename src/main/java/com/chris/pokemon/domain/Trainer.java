@@ -28,4 +28,7 @@ public class Trainer {
     public void addPokemon(Pokemon pokemon) {
         pokemonList.add(pokemon);
     }
+    public void deletePokemon(Pokemon pokemon) {
+        pokemonList.removeIf((x) -> x.getId().longValue()==pokemon.getId().longValue());
+    }
 }
